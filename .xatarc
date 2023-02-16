@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Andriy-Pashynnyk-s-workspace-0j5g5v.eu-west-1.xata.sh/db/my-notes-engine",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
