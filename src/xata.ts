@@ -7,7 +7,38 @@ import type {
 } from "@xata.io/client";
 
 const tables = [
-  { name: "Podcasts", columns: [{ name: "image", type: "string" }] },
+  {
+    name: "Podcasts",
+    columns: [
+      { name: "image", type: "string" },
+      { name: "title", type: "string" },
+      { name: "url", type: "string" },
+    ],
+  },
+  {
+    name: "PodcastEpisodes",
+    columns: [
+      { name: "podcast", type: "link", link: { table: "Podcasts" } },
+      { name: "title", type: "string" },
+      { name: "url", type: "string" },
+      { name: "summary", type: "string" },
+      { name: "showNotesHtml", type: "string" },
+      { name: "publishedAt", type: "datetime" },
+    ],
+  },
+  {
+    name: "PodcastEpisodeNotes",
+    columns: [
+      { name: "text", type: "string" },
+      { name: "createdAt", type: "datetime" },
+      { name: "podcast", type: "link", link: { table: "Podcasts" } },
+      {
+        name: "podcastEpisode",
+        type: "link",
+        link: { table: "PodcastEpisodes" },
+      },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -16,8 +47,16 @@ export type InferredTypes = SchemaInference<SchemaTables>;
 export type Podcasts = InferredTypes["Podcasts"];
 export type PodcastsRecord = Podcasts & XataRecord;
 
+export type PodcastEpisodes = InferredTypes["PodcastEpisodes"];
+export type PodcastEpisodesRecord = PodcastEpisodes & XataRecord;
+
+export type PodcastEpisodeNotes = InferredTypes["PodcastEpisodeNotes"];
+export type PodcastEpisodeNotesRecord = PodcastEpisodeNotes & XataRecord;
+
 export type DatabaseSchema = {
   Podcasts: PodcastsRecord;
+  PodcastEpisodes: PodcastEpisodesRecord;
+  PodcastEpisodeNotes: PodcastEpisodeNotesRecord;
 };
 
 const DatabaseClient = buildClient();
