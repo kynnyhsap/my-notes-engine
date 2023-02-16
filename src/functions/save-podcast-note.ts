@@ -1,12 +1,16 @@
 import { Handler } from "@netlify/functions";
+import { xata } from "../xata-client";
 
-interface IPodcastNoteBody {}
-
-export const handler: Handler = async (event, context) => {
-    console.log({ data: event.body, envs: process.env });
+const handler: Handler = async (event, context) => {
+    const records = await xata.db.Podcasts.getAll();
 
     return {
         statusCode: 200,
-        body: JSON.stringify({ message: "I have never felt more alive 😤" }),
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(records),
     };
 };
+
+export { handler };
