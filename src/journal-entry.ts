@@ -1,6 +1,4 @@
-import * as fs from "fs";
-
-interface JournalEntry {
+export interface JournalEntry {
     text: string;
     photos: any[];
     isAllDay: boolean;
@@ -21,13 +19,7 @@ interface JournalEntry {
     creationDeviceModel: string;
 }
 
-const data = fs.readFileSync("./podcasts.json", "utf8");
-
-const journal = JSON.parse(data) as {
+export interface Journal {
     entries: JournalEntry[];
     metadata: {};
-};
-
-const entries = journal.entries;
-
-console.log(JSON.parse(entries[20].richText));
+}

@@ -1,7 +1,7 @@
 import { Handler } from "@netlify/functions";
 import { xata } from "../xata-client";
 
-const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event, context) => {
     const records = await xata.db.Podcasts.getAll();
 
     return {
@@ -12,5 +12,3 @@ const handler: Handler = async (event, context) => {
         body: JSON.stringify(records),
     };
 };
-
-export { handler };
