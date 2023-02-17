@@ -14,12 +14,15 @@ interface ParsedJournalEntry {
     notes: ParsedPodcastNote[];
 }
 
+const LIMIT = 10;
+
 /*
- * This handler contains the logic to parse the JSON file exported from the Day One Journal app. Make sure you export only 'Podcasts' journal.
+ * This handler contains the logic to parse the JSON file exported from the Day One Journal app.
+ * Make sure you export only 'Podcasts' journal. Intended for one-time use only.
  *
  * NOTE: Only works with my journaling style. If you are not me - forget it =)
  *
- * NOTE 2: Functions is limited ot 10s of execution time. If you have a lot of notes - break parsed data into chunks.
+ * NOTE 2: Functions is limited to 10s of execution time. If you have a lot of notes - break parsed data into chunks of 10 and use page=n query param.
  */
 export const handler: Handler = async (event, context) => {
     if (!event.body) {
@@ -36,7 +39,7 @@ export const handler: Handler = async (event, context) => {
 
     const parsed = parseJournal(JSON.parse(event.body) as Journal);
 
-    const parsedPage = parsed.slice(10 * (page - 1), 10 * page);
+    const parsedPage = parsed.slice(LIMIT * (page - 1), LIMIT * page);
     const records = await fillDatabase(parsedPage);
 
     return {
