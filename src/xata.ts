@@ -7,36 +7,24 @@ import type {
 } from "@xata.io/client";
 
 const tables = [
-  {
-    name: "Podcasts",
-    columns: [
-      { name: "image", type: "string" },
-      { name: "title", type: "string" },
-      { name: "url", type: "string" },
-    ],
-  },
+  { name: "Podcasts", columns: [{ name: "title", type: "string" }] },
   {
     name: "PodcastEpisodes",
     columns: [
       { name: "podcast", type: "link", link: { table: "Podcasts" } },
       { name: "title", type: "string" },
-      { name: "url", type: "string" },
-      { name: "summary", type: "string" },
-      { name: "showNotesHtml", type: "string" },
-      { name: "publishedAt", type: "datetime" },
     ],
   },
   {
     name: "PodcastEpisodeNotes",
     columns: [
-      { name: "text", type: "string" },
       { name: "createdAt", type: "datetime" },
-      { name: "podcast", type: "link", link: { table: "Podcasts" } },
       {
         name: "podcastEpisode",
         type: "link",
         link: { table: "PodcastEpisodes" },
       },
+      { name: "text", type: "text" },
     ],
   },
 ] as const;

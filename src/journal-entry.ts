@@ -23,3 +23,30 @@ export interface Journal {
     entries: JournalEntry[];
     metadata: {};
 }
+
+export interface RichText {
+    meta: {};
+    contents: RichTextNode[];
+}
+
+export interface RichTextNode {
+    text?: string;
+    attributes?: RichTextAttributes;
+    embeddedObjects?: RichTextEmbeddedObject[];
+}
+
+interface RichTextAttributes {
+    line?: {
+        header?: number;
+        indentLevel?: number;
+        quote?: boolean;
+        identifier?: string;
+    };
+    linkURL?: string;
+    bold?: boolean;
+}
+
+interface RichTextEmbeddedObject {
+    type: string;
+    // ...
+}
