@@ -12,7 +12,7 @@ interface MyPodcastNote {
 const router = new Router();
 
 router.get("/", (ctx) => {
-  ctx.response.body = { message: "Oh, so good to be alive!" };
+  ctx.response.body = "Oh, so good to be alive!"; // { message: "Oh, so good to be alive!" };
 });
 
 router.post("/podcast-note", async (ctx) => {
@@ -54,6 +54,6 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.addEventListener("listen", () => console.log("Up and running!"));
+app.addEventListener("listen", () => console.log("Up and running! "));
 
 await app.listen({ port: 8080 });
