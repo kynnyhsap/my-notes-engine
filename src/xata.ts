@@ -1,9 +1,9 @@
-import { buildClient } from "npm:@xata.io/client@latest";
+import { buildClient } from "https://cdn.skypack.dev/@xata.io/client?dts";
 import type {
   BaseClientOptions,
   SchemaInference,
   XataRecord,
-} from "npm:@xata.io/client@latest";
+} from "https://cdn.skypack.dev/@xata.io/client?dts";
 
 const tables = [
   {
