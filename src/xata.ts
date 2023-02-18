@@ -70,6 +70,10 @@ let instance: XataClient | undefined = undefined;
 export const getXataClient = () => {
   if (instance) return instance;
 
-  instance = new XataClient();
+  instance = new XataClient({
+    apiKey: Deno.env.get("XATA_API_KEY"),
+    databaseURL: Deno.env.get("XATA_DATABASE_URL"),
+    branch: Deno.env.get("XATA_FALLBACK_BRANCH"),
+  });
   return instance;
 };

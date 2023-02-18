@@ -1,6 +1,9 @@
 {
   "version": "2",
   "remote": {
+    "https://cdn.skypack.dev/-/@xata.io/client@v0.22.1-SWb2pQpEJAzi0TLu3oEJ/dist=es2019,mode=imports/optimized/@xata.io/client.js": "1cc4f1a069c74fbb7602943f4da780a00ba246dcbe48a0e3e48404b55bd8e94a",
+    "https://cdn.skypack.dev/-/@xata.io/client@v0.22.1-SWb2pQpEJAzi0TLu3oEJ/dist=es2019,mode=types/dist/index.d.ts": "7435492df9314f65b72191b6c0da301f94abdfd9d1f8244ce841ce2bae351a0a",
+    "https://cdn.skypack.dev/@xata.io/client?dts": "e1a959886a15746447471ed8d3f775a910c7ce3fc101663387e26745ce2ef1f0",
     "https://deno.land/std@0.152.0/_util/assert.ts": "e94f2eb37cebd7f199952e242c77654e43333c1ac4c5c700e929ea3aa5489f74",
     "https://deno.land/std@0.152.0/_util/os.ts": "3b4c6e27febd119d36a416d7a97bd3b0251b77c88942c8f16ee5953ea13e2e49",
     "https://deno.land/std@0.152.0/async/deferred.ts": "bc18e28108252c9f67dfca2bbc4587c3cbf3aeb6e155f8c864ca8ecff992b98a",

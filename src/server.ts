@@ -13,13 +13,18 @@ const router = new Router();
 
 router.get("/", (ctx) => {
   ctx.response.body = { message: "Oh, so good to be alive!" };
+
+  return;
 });
 
 router.post("/podcast-note", async (ctx) => {
-  const xata = getXataClient();
   const data: MyPodcastNote = await ctx.request.body({ type: "json" }).value;
 
   console.log("Received note:", data);
+
+  console.log(Deno.env.get("XATA_API_KEY"));
+
+  const xata = getXataClient();
 
   let podcast = await xata.db.Podcasts.filter({
     title: data.podcastTitle,
@@ -48,6 +53,8 @@ router.post("/podcast-note", async (ctx) => {
 
   ctx.response.body = podcastEpisodeNote;
   ctx.response.status = 200;
+
+  return;
 });
 
 const app = new Application();
