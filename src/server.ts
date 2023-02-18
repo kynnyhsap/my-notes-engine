@@ -42,6 +42,7 @@ router.post("/podcast-note", async (ctx) => {
   const podcastEpisodeNote = await xata.db.PodcastEpisodeNotes.create({
     text: data.text,
     podcastEpisode: podcastEpisode.id,
+    createdAt: new Date(),
   });
 
   console.log("Saved note:", podcastEpisodeNote);
