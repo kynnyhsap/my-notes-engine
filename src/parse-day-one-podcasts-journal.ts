@@ -1,4 +1,3 @@
-import "https://deno.land/std@0.177.0/dotenv/load.ts";
 import { getXataClient } from "./xata.ts";
 import { parse } from "npm:date-format-parse";
 

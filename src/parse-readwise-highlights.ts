@@ -1,4 +1,3 @@
-import "https://deno.land/std@0.177.0/dotenv/load.ts";
 import { getXataClient } from "./xata.ts";
 
 const HIGHLIGHTS_ENDPOINT = "https://readwise.io/api/v2/highlights";

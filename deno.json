@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "parse-day-one-podcasts-journal": "deno run --allow-all src/parse-day-one-podcasts-journal.ts --",
-    "parse-readwise-highlights": "deno run --allow-all src/parse-readwise-highlights.ts"
+    "dev": "export $(cat .env | xargs) && deno run --allow-all --watch src/server.ts",
+    "parse-day-one-podcasts-journal": "export $(cat .env | xargs) && deno run --allow-all src/parse-day-one-podcasts-journal.ts --",
+    "parse-readwise-highlights": "export $(cat .env | xargs) && deno run --allow-all src/parse-readwise-highlights.ts"
   }
 }
