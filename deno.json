@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "parse-day-one-podcasts-journal": "deno run --allow-all src/parse-day-one-podcasts-journal.ts --",
+    "parse-readwise-highlights": "deno run --allow-all src/parse-readwise-highlights.ts"
+  }
+}
