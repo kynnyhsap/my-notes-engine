@@ -28,7 +28,7 @@ async function parseReadwiseItems(endpoint: string) {
   return items;
 }
 
-// const highlights = await parseReadwiseItems(HIGHLIGHTS_ENDPOINT);
+const highlights = await parseReadwiseItems(HIGHLIGHTS_ENDPOINT);
 const books = await parseReadwiseItems(BOOKS_ENDPOINT);
 
-console.log({ books });
+console.log({ books, highlights });
