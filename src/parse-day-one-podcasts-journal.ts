@@ -1,7 +1,59 @@
 import "https://deno.land/std@0.177.0/dotenv/load.ts";
 import { getXataClient } from "./xata.ts";
-import { DayOneJournal, Journal, RichText } from "./day-one-journal.ts";
 import { parse } from "npm:date-format-parse";
+
+export interface DayOneJournal {
+  text: string;
+  photos: any[];
+  isAllDay: boolean;
+  uuid: string;
+  modifiedDate: string;
+  richText: string;
+  timeZone: string;
+  creationOSName: string;
+  creationOSVersion: string;
+  tags: string[];
+  creationDate: string;
+  editingTime: number;
+  isPinned: boolean;
+  creationDevice: string;
+  creationDeviceType: string;
+  duration: number;
+  starred: boolean;
+  creationDeviceModel: string;
+}
+
+export interface Journal {
+  entries: DayOneJournal[];
+  metadata: {};
+}
+
+export interface RichText {
+  meta: {};
+  contents: RichTextNode[];
+}
+
+export interface RichTextNode {
+  text?: string;
+  attributes?: RichTextAttributes;
+  embeddedObjects?: RichTextEmbeddedObject[];
+}
+
+interface RichTextAttributes {
+  line?: {
+    header?: number;
+    indentLevel?: number;
+    quote?: boolean;
+    identifier?: string;
+  };
+  linkURL?: string;
+  bold?: boolean;
+}
+
+interface RichTextEmbeddedObject {
+  type: string;
+  // ...
+}
 
 interface ParsedPodcastNote {
   text: string;
@@ -13,8 +65,6 @@ interface ParsedJournalEntry {
   episodeTitle: string;
   notes: ParsedPodcastNote[];
 }
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fillDatabase(parsedEntries: ParsedJournalEntry[]) {
   const xata = getXataClient();
