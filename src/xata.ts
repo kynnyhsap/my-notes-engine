@@ -32,6 +32,13 @@ const tables = [
       { name: "text", type: "text" },
     ],
   },
+  {
+    name: "Notes",
+    columns: [
+      { name: "createdAt", type: "datetime" },
+      { name: "text", type: "text" },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -46,10 +53,14 @@ export type PodcastEpisodesRecord = PodcastEpisodes & XataRecord;
 export type PodcastEpisodeNotes = InferredTypes["PodcastEpisodeNotes"];
 export type PodcastEpisodeNotesRecord = PodcastEpisodeNotes & XataRecord;
 
+export type Notes = InferredTypes["Notes"];
+export type NotesRecord = Notes & XataRecord;
+
 export type DatabaseSchema = {
   Podcasts: PodcastsRecord;
   PodcastEpisodes: PodcastEpisodesRecord;
   PodcastEpisodeNotes: PodcastEpisodeNotesRecord;
+  Notes: NotesRecord;
 };
 
 const DatabaseClient = buildClient();

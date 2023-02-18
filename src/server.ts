@@ -9,6 +9,10 @@ interface MyPodcastNote {
   text: string;
 }
 
+interface MyNote {
+  text: string;
+}
+
 const router = new Router();
 
 router.get("/", (ctx) => {
@@ -54,6 +58,28 @@ router.post("/podcast-note", async (ctx) => {
     podcast,
     podcastEpisode,
     podcastEpisodeNote,
+  };
+  ctx.response.status = 200;
+  return;
+});
+
+router.post("/note", async (ctx) => {
+  const data: MyNote = await ctx.request.body({ type: "json" }).value;
+
+  console.log("Received note:", data);
+
+  const xata = getXataClient();
+
+  const note = await xata.db.Notes.create({
+    text: data.text,
+    createdAt: new Date(),
+  });
+
+  console.log("Saved note:", note);
+
+  ctx.response.body = {
+    receivedData: data,
+    note,
   };
   ctx.response.status = 200;
   return;
