@@ -12,7 +12,7 @@ interface MyPodcastNote {
 const router = new Router();
 
 router.get("/", (ctx) => {
-  ctx.response.body = "Oh, so good to be alive!"; // { message: "Oh, so good to be alive!" };
+  ctx.response.body = { message: "Oh, so good to be alive!" };
 });
 
 router.post("/podcast-note", async (ctx) => {
