@@ -22,8 +22,6 @@ router.post("/podcast-note", async (ctx) => {
 
   console.log("Received note:", data);
 
-  console.log(Deno.env.get("XATA_API_KEY"));
-
   const xata = getXataClient();
 
   let podcast = await xata.db.Podcasts.filter({
@@ -51,9 +49,13 @@ router.post("/podcast-note", async (ctx) => {
 
   console.log("Saved note:", podcastEpisodeNote);
 
-  ctx.response.body = podcastEpisodeNote;
+  ctx.response.body = {
+    receivedData: data,
+    podcast,
+    podcastEpisode,
+    podcastEpisodeNote,
+  };
   ctx.response.status = 200;
-
   return;
 });
 
