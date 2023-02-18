@@ -1,4 +1,4 @@
-export interface JournalEntry {
+export interface DayOneJournal {
     text: string;
     photos: any[];
     isAllDay: boolean;
@@ -20,7 +20,7 @@ export interface JournalEntry {
 }
 
 export interface Journal {
-    entries: JournalEntry[];
+    entries: DayOneJournal[];
     metadata: {};
 }
 

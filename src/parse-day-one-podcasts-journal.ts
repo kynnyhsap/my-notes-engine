@@ -1,7 +1,8 @@
-import { Handler } from "@netlify/functions";
-import { xata } from "../xata-client";
-import { Journal, JournalEntry, RichText } from "../journal-entry";
-import { parse } from "date-format-parse";
+
+
+import { getXataClient } from "./xata.ts";
+import { Journal, DayOneJournal, RichText } from "./day-one-journal.ts";
+import { parse } from "npm:date-format-parse";
 
 interface ParsedPodcastNote {
     text: string;
@@ -14,44 +15,10 @@ interface ParsedJournalEntry {
     notes: ParsedPodcastNote[];
 }
 
-const LIMIT = 10;
-
-/*
- * This handler contains the logic to parse the JSON file exported from the Day One Journal app.
- * Make sure you export only 'Podcasts' journal. Intended for one-time use only.
- *
- * NOTE: Only works with my journaling style. If you are not me - forget it =)
- *
- * NOTE 2: Functions is limited to 10s of execution time. If you have a lot of notes - break parsed data into chunks of 10 and use page=n query param.
- */
-export const handler: Handler = async (event, context) => {
-    if (!event.body) {
-        return {
-            statusCode: 400,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ error: "No body, no party" }),
-        };
-    }
-
-    const page = Number(event.queryStringParameters?.page || 1);
-
-    const parsed = parseJournal(JSON.parse(event.body) as Journal);
-
-    const parsedPage = parsed.slice(LIMIT * (page - 1), LIMIT * page);
-    const records = await fillDatabase(parsedPage);
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ page, parsed: parsedPage, records }),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    };
-};
 
 async function fillDatabase(parsedEntries: ParsedJournalEntry[]) {
+  const xata = getXataClient();
+
     const podcasts = await Promise.all(
         [...new Set(parsedEntries.map(({ podcastTitle }) => podcastTitle))].map(
             async (title) => {
@@ -103,13 +70,16 @@ async function fillDatabase(parsedEntries: ParsedJournalEntry[]) {
     };
 }
 
+/*
+ * NOTE: Only works with my journaling style. If you are not me - forget it =)
+ */
 function parseJournal(journal: Journal) {
     return journal.entries
         .map(parsePodcastEntry)
         .filter(Boolean) as ParsedJournalEntry[];
 }
 
-function parsePodcastEntry(entry: JournalEntry): ParsedJournalEntry | null {
+function parsePodcastEntry(entry: DayOneJournal): ParsedJournalEntry | null {
     if (!entry.richText) return null;
 
     const { contents } = JSON.parse(entry.richText) as RichText;
@@ -140,3 +110,6 @@ function parsePodcastEntry(entry: JournalEntry): ParsedJournalEntry | null {
         notes: parsedNotes,
     };
 }
+
+// const parsed = parseJournal(JSON.parse(event.body) as Journal);
+// const records = await fillDatabase(parsed);
