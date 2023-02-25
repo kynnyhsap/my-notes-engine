@@ -1,5 +1,9 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { getXataClient } from "./xata.ts";
+import {
+  parseReadwiseBooks,
+  parseReadwiseHighlights,
+} from "./parse-readwise-highlights.ts";
 
 interface MyPodcastNote {
   podcastTitle: string;
@@ -82,6 +86,69 @@ router.post("/note", async (ctx) => {
     note,
   };
   ctx.response.status = 200;
+  return;
+});
+
+router.post("/sync-readwise-highlights", async (ctx) => {
+  console.log("Parsing Readwise highlights...");
+
+  const readwiseHighlights = await parseReadwiseHighlights();
+  const readwiseBooks = await parseReadwiseBooks();
+
+  const xata = getXataClient();
+
+  const syncedBooks = await xata.db.Books.getAll();
+
+  const syncedBookIds = syncedBooks.map((book) => book.readwiseId);
+  const readwiseBooksToSync = readwiseBooks.filter(
+    (readwiseBook) => !syncedBookIds.includes(readwiseBook.id)
+  );
+
+  console.log("Syncing books: ", readwiseBooksToSync);
+
+  const newSyncedBooks = await xata.db.Books.create(
+    readwiseBooksToSync.map(({ id, title, author, cover_image_url }) => {
+      return {
+        readwiseId: id,
+        title,
+        author,
+        image: cover_image_url,
+      };
+    })
+  );
+
+  const allBooks = [...syncedBooks, ...newSyncedBooks];
+
+  const syncedHighlights = await xata.db.BookHighlights.getAll();
+  const syncedHighlightIds = syncedHighlights.map(
+    ({ readwiseId }) => readwiseId
+  );
+
+  const readwiseHighlightsToSync = readwiseHighlights.filter(
+    (readwiseHighlight) => !syncedHighlightIds.includes(readwiseHighlight.id)
+  );
+
+  console.log("Syncing highlights: ", readwiseHighlightsToSync);
+
+  const newSyncedHighlights = await xata.db.BookHighlights.create(
+    readwiseHighlightsToSync.map(
+      ({ id, book_id, text, note, highlighted_at }) => {
+        return {
+          readwiseId: id,
+          book: allBooks.find((book) => book.readwiseId === book_id)?.id,
+          text,
+          note,
+          createdAt: new Date(highlighted_at),
+        };
+      }
+    )
+  );
+
+  ctx.response.status = 200;
+  ctx.response.body = {
+    newSyncedBooks,
+    newSyncedHighlights,
+  };
   return;
 });
 

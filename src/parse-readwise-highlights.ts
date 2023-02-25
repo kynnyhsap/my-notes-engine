@@ -1,11 +1,46 @@
-import { getXataClient } from "./xata.ts";
-
 const HIGHLIGHTS_ENDPOINT = "https://readwise.io/api/v2/highlights";
 const BOOKS_ENDPOINT = "https://readwise.io/api/v2/books";
 
+const READWISE_API_KEY = Deno.env.get("READWISE_API_KEY");
+
+export interface ReadwiseHighlight {
+  id: number;
+  book_id: number;
+
+  text: string;
+  note: string;
+
+  highlighted_at: string;
+
+  // location: string;
+  // location_type: string;
+  // url: string | null;
+  // color: string;
+  // updated: string;
+  // tags: string[];
+}
+
+export interface ReadwiseBook {
+  id: number;
+
+  title: string;
+  author: string;
+
+  cover_image_url: string;
+
+  // category: string;
+  // source: string;
+  // num_highlights: number;
+  // last_highlighted_at: string | null;
+  // updated: string;
+  // cover_image_width: number;
+  // tags: string[];
+  // document_note: string;
+}
+
 async function parseReadwiseItems(endpoint: string) {
   const headers = {
-    Authorization: `Token ${Deno.env.get("READWISE_API_KEY")}`,
+    Authorization: `Token ${READWISE_API_KEY}`,
   };
 
   const items = [];
@@ -27,7 +62,10 @@ async function parseReadwiseItems(endpoint: string) {
   return items;
 }
 
-const highlights = await parseReadwiseItems(HIGHLIGHTS_ENDPOINT);
-const books = await parseReadwiseItems(BOOKS_ENDPOINT);
+export function parseReadwiseHighlights(): Promise<ReadwiseHighlight[]> {
+  return parseReadwiseItems(HIGHLIGHTS_ENDPOINT);
+}
 
-console.log({ books, highlights });
+export function parseReadwiseBooks(): Promise<ReadwiseBook[]> {
+  return parseReadwiseItems(BOOKS_ENDPOINT);
+}
