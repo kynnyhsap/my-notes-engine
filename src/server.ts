@@ -8,6 +8,8 @@ import {
 interface MyPodcastNote {
   podcastTitle: string;
 
+  podcastImage?: string;
+
   episodeTitle: string;
 
   text: string;
@@ -36,7 +38,10 @@ router.post("/podcast-note", async (ctx) => {
     title: data.podcastTitle,
   }).getFirst();
   if (!podcast) {
-    podcast = await xata.db.Podcasts.create({ title: data.podcastTitle });
+    podcast = await xata.db.Podcasts.create({
+      title: data.podcastTitle,
+      image: data.podcastImage,
+    });
   }
 
   let podcastEpisode = await xata.db.PodcastEpisodes.filter({
