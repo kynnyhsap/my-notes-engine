@@ -1,120 +1,122 @@
-import { buildClient } from "https://cdn.skypack.dev/@xata.io/client?dts";
-import type {
+import {
+  buildClient,
   BaseClientOptions,
   SchemaInference,
   XataRecord,
-} from "https://cdn.skypack.dev/@xata.io/client?dts";
+} from '@xata.io/client';
+
+import fetch from 'node-fetch';
 
 const tables = [
   {
-    name: "Podcasts",
+    name: 'Podcasts',
     columns: [
       {
-        name: "title",
-        type: "string",
+        name: 'title',
+        type: 'string',
       },
       {
-        name: "image",
-        type: "string",
+        name: 'image',
+        type: 'string',
       },
     ],
   },
   {
-    name: "PodcastEpisodes",
+    name: 'PodcastEpisodes',
     columns: [
       {
-        name: "podcast",
-        type: "link",
+        name: 'podcast',
+        type: 'link',
         link: {
-          table: "Podcasts",
+          table: 'Podcasts',
         },
       },
       {
-        name: "title",
-        type: "string",
+        name: 'title',
+        type: 'string',
       },
     ],
   },
   {
-    name: "PodcastEpisodeNotes",
+    name: 'PodcastEpisodeNotes',
     columns: [
       {
-        name: "createdAt",
-        type: "datetime",
+        name: 'createdAt',
+        type: 'datetime',
       },
       {
-        name: "podcastEpisode",
-        type: "link",
+        name: 'podcastEpisode',
+        type: 'link',
         link: {
-          table: "PodcastEpisodes",
+          table: 'PodcastEpisodes',
         },
       },
       {
-        name: "text",
-        type: "text",
+        name: 'text',
+        type: 'text',
       },
     ],
   },
   {
-    name: "Notes",
+    name: 'Notes',
     columns: [
       {
-        name: "text",
-        type: "text",
+        name: 'text',
+        type: 'text',
       },
       {
-        name: "createdAt",
-        type: "datetime",
+        name: 'createdAt',
+        type: 'datetime',
       },
     ],
   },
   {
-    name: "Books",
+    name: 'Books',
     columns: [
       {
-        name: "readwiseId",
-        type: "int",
+        name: 'readwiseId',
+        type: 'int',
         unique: true,
       },
       {
-        name: "image",
-        type: "string",
+        name: 'image',
+        type: 'string',
       },
       {
-        name: "title",
-        type: "string",
+        name: 'title',
+        type: 'string',
       },
       {
-        name: "author",
-        type: "string",
+        name: 'author',
+        type: 'string',
       },
     ],
   },
   {
-    name: "BookHighlights",
+    name: 'BookHighlights',
     columns: [
       {
-        name: "readwiseId",
-        type: "int",
+        name: 'readwiseId',
+        type: 'int',
         unique: true,
       },
       {
-        name: "text",
-        type: "text",
+        name: 'text',
+        type: 'text',
       },
       {
-        name: "note",
-        type: "text",
+        name: 'note',
+        type: 'text',
       },
       {
-        name: "createdAt",
-        type: "datetime",
+        name: 'createdAt',
+        type: 'datetime',
       },
       {
-        name: "book",
-        type: "link",
+        name: 'book',
+        type: 'link',
         link: {
-          table: "Books",
+          table: 'Books',
         },
       },
     ],
@@ -124,22 +126,22 @@ const tables = [
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
 
-export type Podcasts = InferredTypes["Podcasts"];
+export type Podcasts = InferredTypes['Podcasts'];
 export type PodcastsRecord = Podcasts & XataRecord;
 
-export type PodcastEpisodes = InferredTypes["PodcastEpisodes"];
+export type PodcastEpisodes = InferredTypes['PodcastEpisodes'];
 export type PodcastEpisodesRecord = PodcastEpisodes & XataRecord;
 
-export type PodcastEpisodeNotes = InferredTypes["PodcastEpisodeNotes"];
+export type PodcastEpisodeNotes = InferredTypes['PodcastEpisodeNotes'];
 export type PodcastEpisodeNotesRecord = PodcastEpisodeNotes & XataRecord;
 
-export type Notes = InferredTypes["Notes"];
+export type Notes = InferredTypes['Notes'];
 export type NotesRecord = Notes & XataRecord;
 
-export type Books = InferredTypes["Books"];
+export type Books = InferredTypes['Books'];
 export type BooksRecord = Books & XataRecord;
 
-export type BookHighlights = InferredTypes["BookHighlights"];
+export type BookHighlights = InferredTypes['BookHighlights'];
 export type BookHighlightsRecord = BookHighlights & XataRecord;
 
 export type DatabaseSchema = {
@@ -153,14 +155,9 @@ export type DatabaseSchema = {
 
 const DatabaseClient = buildClient();
 
-const defaultOptions = {
-  databaseURL:
-    "https://Andriy-Pashynnyk-s-workspace-0j5g5v.eu-west-1.xata.sh/db/my-notes-engine",
-};
-
 export class XataClient extends DatabaseClient<DatabaseSchema> {
   constructor(options?: BaseClientOptions) {
-    super({ ...defaultOptions, ...options }, tables);
+    super({ ...options }, tables);
   }
 }
 
@@ -170,9 +167,11 @@ export const getXataClient = () => {
   if (instance) return instance;
 
   instance = new XataClient({
-    apiKey: Deno.env.get("XATA_API_KEY"),
-    databaseURL: Deno.env.get("XATA_DATABASE_URL"),
-    branch: Deno.env.get("XATA_FALLBACK_BRANCH"),
+    apiKey: process.env.XATA_API_KEY,
+    databaseURL: process.env.XATA_DATABASE_URL,
+    branch: process.env.XATA_FALLBACK_BRANCH,
+    fetch,
   });
+
   return instance;
 };

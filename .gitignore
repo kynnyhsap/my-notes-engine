@@ -1,9 +1,13 @@
+/dist
+
+/node_modules
+
+.DS_Store
+
+
 .idea
+.vscode
 
-node_modules
-
-# Local Netlify folder
 .netlify
-
 
 .env

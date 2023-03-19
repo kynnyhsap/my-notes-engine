@@ -1,7 +1,7 @@
-const HIGHLIGHTS_ENDPOINT = "https://readwise.io/api/v2/highlights";
-const BOOKS_ENDPOINT = "https://readwise.io/api/v2/books";
+const HIGHLIGHTS_ENDPOINT = 'https://readwise.io/api/v2/highlights';
+const BOOKS_ENDPOINT = 'https://readwise.io/api/v2/books';
 
-const READWISE_API_KEY = Deno.env.get("READWISE_API_KEY");
+const READWISE_API_KEY = process.env.READWISE_API_KEY;
 
 export interface ReadwiseHighlight {
   id: number;
